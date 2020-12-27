@@ -1,6 +1,8 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PriceList from './components/PriceList';
+import ViewTab from './components/ViewTab';
+import {LIST_VIEW, CHART_VIEW} from './utility'
 const items = [
   {
     id: 1,
@@ -34,6 +36,10 @@ function App() {
       <header>
         
       </header>
+      <ViewTab 
+        activeTab={LIST_VIEW}
+        onTabChange={(view) => {console.log(view)}}
+      />
       <PriceList 
         items={items}
         onModifyItem={(item) => {console.log(item)}}

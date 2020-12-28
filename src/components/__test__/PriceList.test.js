@@ -16,7 +16,7 @@ let wrapper
 describe('test PriceList component', () => {
   beforeEach(() => {
     wrapper = shallow(<PriceList {...props} />)
-    
+
   })
   it('should render the component to match snapshot', () => {
     // wrapper.getElement() 修复empty ShallowWrapper {}

@@ -50,7 +50,7 @@ export const items = [
     cid: 2,
   },
 ]
-const newItem = {
+export const newItem = {
   id: 4,
   title: '新添加的项目',
   date: '2020-12-10',
@@ -62,7 +62,7 @@ export default class Home extends PureComponent {
     super(props)
     this.state = {
       items,
-      currentDate: parseToYearAndMonth(),
+      currentDate: parseToYearAndMonth('2020/12/10'),
       tabView: LIST_VIEW,
     }
   }
@@ -148,7 +148,7 @@ export default class Home extends PureComponent {
               onDeleteItem={this.deleteItem}
             />
           )}
-          {tabView === CHART_VIEW && <h1>这里是图表区域</h1>}
+          {tabView === CHART_VIEW && <h1 className="chart-title">这里是图表区域</h1>}
         </div>
       </React.Fragment>
     )

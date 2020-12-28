@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PriceList from './components/PriceList';
 import ViewTab from './components/ViewTab';
 import {LIST_VIEW, CHART_VIEW} from './utility'
+import TotalPrice from './components/TotalPrice';
 const items = [
   {
     id: 1,
@@ -34,7 +35,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        
+      <TotalPrice />
       </header>
       <ViewTab 
         activeTab={LIST_VIEW}
@@ -45,6 +46,7 @@ function App() {
         onModifyItem={(item) => {console.log(item)}}
         onDeleteItem={(item) => {console.log(item)}}
       />
+      
     </div>
   )
 }

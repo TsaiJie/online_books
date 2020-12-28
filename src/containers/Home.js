@@ -53,7 +53,7 @@ const items = [
 const newItem = {
   id: 4,
   title: '新添加的项目',
-  date: '2020-09-10',
+  date: '2020-12-10',
   price: 300,
   cid: 1,
 }

@@ -1,9 +1,10 @@
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import PriceList from './components/PriceList';
-import ViewTab from './components/ViewTab';
-import {LIST_VIEW, CHART_VIEW} from './utility'
-import TotalPrice from './components/TotalPrice';
+import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import PriceList from './components/PriceList'
+import ViewTab from './components/ViewTab'
+import { LIST_VIEW, CHART_VIEW } from './utility'
+import TotalPrice from './components/TotalPrice'
+import MonthPicker from './components/MonthPicker'
 const items = [
   {
     id: 1,
@@ -14,7 +15,7 @@ const items = [
       id: '1',
       name: '旅行',
       type: 'outcome',
-      iconName: 'ios-plane'
+      iconName: 'ios-plane',
     },
   },
   {
@@ -26,27 +27,32 @@ const items = [
       id: '1',
       name: '旅行',
       type: 'outcome',
-      iconName: 'ios-plane'
+      iconName: 'ios-plane',
     },
   },
-  
-];
+]
 function App() {
   return (
     <div className="App">
       <header>
-      <TotalPrice />
+        <TotalPrice />
       </header>
-      <ViewTab 
+      <ViewTab
         activeTab={LIST_VIEW}
-        onTabChange={(view) => {console.log(view)}}
+        onTabChange={(view) => {
+          console.log(view)
+        }}
       />
-      <PriceList 
+      <PriceList
         items={items}
-        onModifyItem={(item) => {console.log(item)}}
-        onDeleteItem={(item) => {console.log(item)}}
+        onModifyItem={(item) => {
+          console.log(item)
+        }}
+        onDeleteItem={(item) => {
+          console.log(item)
+        }}
       />
-      
+      <MonthPicker year={2015} month={2} />
     </div>
   )
 }

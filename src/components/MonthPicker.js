@@ -15,9 +15,10 @@ class MonthPicker extends PureComponent {
   documentClickHandler(e) {
     // 判断当前点击的元素中是否包含 MonthPicker
     const currentClick = e.target
-    const flag = currentClick.contains(this.monthPickerRef.current)
+    const monthPicker = this.monthPickerRef.current
+    const flag = monthPicker.contains(currentClick)
     //如果包含则进行关闭
-    flag && this.setState({ isOpen: false })
+    !flag && this.setState({ isOpen: false })
   }
   componentDidMount() {
     document.addEventListener('click', this.documentClickHandler)
@@ -55,9 +56,9 @@ class MonthPicker extends PureComponent {
         className="dropdown month-picker-component"
         ref={this.monthPickerRef}
       >
-        <h4>选择月份</h4>
+        <h5>选择月份</h5>
         <button
-          className="btn btn-lg btn-secondary dropdown-toggle"
+          className="btn  btn-secondary dropdown-toggle"
           onClick={(e) => {
             this.toggleDropdown(e)
           }}

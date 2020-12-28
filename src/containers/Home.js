@@ -5,6 +5,7 @@ import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME } from '../utility'
 import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
 import CreateBtn from '../components/CreateBtn'
+import logo from '../logo.svg'
 const items = [
   {
     id: 1,
@@ -53,38 +54,39 @@ export default class Home extends PureComponent {
     }
   }
   render() {
-    const {year, month} = this.state
-    let totalIncome = 0, totalOutcome = 0;
-    items.forEach(item => {
-      if(item.category.type === TYPE_OUTCOME){
+    const { year, month } = this.state
+    let totalIncome = 0,
+      totalOutcome = 0
+    items.forEach((item) => {
+      if (item.category.type === TYPE_OUTCOME) {
         totalOutcome += item.price
-      }else {
+      } else {
         totalIncome += item.price
       }
     })
     return (
       <React.Fragment>
         <header className="App-header">
+          <div className="row mb-5 justify-content-center">
+            <img src={logo} className="App-logo" alt="logo" />
+          </div>
           <div className="row">
             <div className="col">
               <MonthPicker
                 year={year}
                 month={month}
-                onChange ={(year, month) => this.setState({month, year})}
-               />
+                onChange={(year, month) => this.setState({ month, year })}
+              />
             </div>
             <div className="col">
-              <TotalPrice 
-                income={totalIncome}
-                outcome={totalOutcome}
-              />
+              <TotalPrice income={totalIncome} outcome={totalOutcome} />
             </div>
           </div>
         </header>
         <div className="content-area py-3 px-3">
-          <ViewTab activeTab={LIST_VIEW} onTabChange={()=>{}}></ViewTab>
-          <CreateBtn onClick={() => {}}/>
-          <PriceList 
+          <ViewTab activeTab={LIST_VIEW} onTabChange={() => {}}></ViewTab>
+          <CreateBtn onClick={() => {}} />
+          <PriceList
             items={items}
             onModifyItem={() => {}}
             onDeleteItem={() => {}}

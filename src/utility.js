@@ -10,3 +10,6 @@ export const range = (size, startAt = 0) => {
   }
   return arr
 }
+export const getState = (defaultNum, selectNum) => {
+  return defaultNum === selectNum ? 'dropdown-item active' : 'dropdown-item'
+}

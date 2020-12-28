@@ -56,7 +56,7 @@ class MonthPicker extends PureComponent {
         className="dropdown month-picker-component"
         ref={this.monthPickerRef}
       >
-        <h5>选择月份</h5>
+        <span style={{fontSize:'18px', fontWeight: 700, marginRight: '20px'}}>选择月份 :</span> 
         <button
           className="btn  btn-secondary dropdown-toggle"
           onClick={(e) => {

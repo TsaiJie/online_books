@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test MonthPicker component should render the component to match snapshot 1`] = `
+<MonthPicker
+  month={8}
+  onChange={[MockFunction]}
+  year={2018}
+/>
+`;

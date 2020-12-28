@@ -7,6 +7,7 @@ class MonthPicker extends PureComponent {
     super(props)
     this.state = {
       isOpen: false,
+      selectedYear: props.year
     }
     this.monthPickerRef = React.createRef()
     // 绑定的函数要唯一 方便取消监听
@@ -69,7 +70,7 @@ class MonthPicker extends PureComponent {
         {isOpen && (
           <div className="dropdown-menu" style={{ display: 'block' }}>
             <div className="row">
-              <div className="col border-right">
+              <div className="col border-right years-range">
                 {yearRange.map((yearNumber, index) => (
                   <a
                     key={index}
@@ -81,7 +82,7 @@ class MonthPicker extends PureComponent {
                   </a>
                 ))}
               </div>
-              <div className="col">
+              <div className="col months-range">
                 {monthRange.map((monthNumber, index) => (
                   <a
                     onClick={(event) => this.selectMonth(event, monthNumber)}

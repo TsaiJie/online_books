@@ -40,4 +40,6 @@ describe('test PriceList component', () => {
     firstItem.find('a').last().simulate('click')
     expect(props.onDeleteItem).toHaveBeenCalledWith(itemsWithCategory[0])
   })
+
+  
 })

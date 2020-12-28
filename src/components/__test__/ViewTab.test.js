@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import ViewTab from '../ViewTab'
-import Ionicon from 'react-ionicons'
 import { LIST_VIEW, CHART_VIEW } from '../../utility'
 
 const props = {

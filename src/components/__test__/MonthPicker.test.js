@@ -1,8 +1,8 @@
 import React from 'react'
+import ReactDOM from 'react-dom';
 //  mount 真实的DOM环境 真实的event
 import { mount } from 'enzyme'
 import MonthPicker from '../MonthPicker'
-import { exact } from 'prop-types'
 let props = {
   year: 2018,
   month: 8,
@@ -42,7 +42,27 @@ describe('test MonthPicker component', () => {
     wrapper.find('.months-range .dropdown-item').first().simulate('click')
     expect(wrapper.state('isOpen')).toEqual(false)
     expect(props.onChange).toHaveBeenCalledWith(2014, 1)
-  });
+  })
+  it('after the dropdown is shown, click the document should close the dropdown', () => {
+    let eventMap = {}
+    document.addEventListener = jest.fn((event, cb) => {
+      eventMap[event] = cb
+    })
+    const wrapper = mount(<MonthPicker {...props}/>)
+    wrapper.find('.dropdown-toggle').simulate('click')
+    expect(wrapper.state('isOpen')).toEqual(true)
+    expect(wrapper.find('.dropdown-menu').length).toEqual(1)
+    // 元素本身 ReactDOM.findDOMNode(wrapper.instance())
+    eventMap.click({
+      target: ReactDOM.findDOMNode(wrapper.instance())
+    })
+    expect(wrapper.state('isOpen')).toEqual(true)
+    eventMap.click({
+      target: document
+    })
+    expect(wrapper.state('isOpen')).toEqual(false)
+  })
+  
   
 });
 

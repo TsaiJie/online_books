@@ -10,10 +10,8 @@ class MonthPicker extends PureComponent {
       selectedYear: props.year
     }
     this.monthPickerRef = React.createRef()
-    // 绑定的函数要唯一 方便取消监听
-    this.documentClickHandler = this.documentClickHandler.bind(this)
   }
-  documentClickHandler(e) {
+  documentClickHandler = (e) => {
     // 判断当前点击的元素中是否包含 MonthPicker
     const currentClick = e.target
     const monthPicker = this.monthPickerRef.current
@@ -22,10 +20,12 @@ class MonthPicker extends PureComponent {
     !flag && this.setState({ isOpen: false })
   }
   componentDidMount() {
-    document.addEventListener('click', this.documentClickHandler)
+    // false =》 冒泡
+    // true =》 捕获
+    document.addEventListener('click', this.documentClickHandler, false)
   }
   componentWillUnmount() {
-    document.removeEventListener('click', this.documentClickHandler)
+    document.removeEventListener('click', this.documentClickHandler, false)
   }
   toggleDropdown(event) {
     event.preventDefault()

@@ -51,7 +51,7 @@ const Create = ({match }) => {
   return (
     <React.Fragment>
       <CategorySelect {...propsWithCategory}/>
-      <PriceForm item={testItem[0]} onFormSubmit={()=>{}} onFormCreate={()=>{}}/>
+      <PriceForm item={testItem[0]} onFormSubmit={(a,b)=>{console.log(a,b)}} onCancelSubmit={(e)=>{console.log(e)}}/>
     </React.Fragment>
 
   )

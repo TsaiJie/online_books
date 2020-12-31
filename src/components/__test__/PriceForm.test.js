@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 import PriceFrom from '../PriceForm'
 import { testItems } from '../../testData'
-import { items } from '../../containers/Home'
 const props = {
   onFormSubmit: jest.fn(),
   onCancelSubmit: jest.fn()

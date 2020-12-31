@@ -41,11 +41,18 @@ export default class PriceForm extends PureComponent {
           errorMessage: ''
         })
         if (editMode) {
+          console.log({ ...item, title, price, date }, editMode)
           onFormSubmit({ ...item, title, price, date }, editMode)
         } else {
+          console.log({  title, price, date }, editMode)
           onFormSubmit({ title, price, date }, editMode)
         }
       }
+    }else{
+      this.setState({
+        validatePass: false,
+        errorMessage: '请输入所有的必选项'
+      })
     }
     
   }

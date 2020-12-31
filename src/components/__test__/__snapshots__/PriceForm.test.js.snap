@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test PriceForm component should render the component to match snapshot 1`] = `
+<PriceForm
+  item={Object {}}
+  onCancelSubmit={[MockFunction]}
+  onFormSubmit={[MockFunction]}
+/>
+`;
+
+exports[`test PriceForm component should render the component to match snapshot 2`] = `
+<PriceForm
+  item={
+    Object {
+      "cid": "1",
+      "date": "2020-12-15",
+      "id": "_kly1klf4g",
+      "monthCategory": "2020-12",
+      "price": 100,
+      "timestamp": 1534291200000,
+      "title": "buy stuff for kitten",
+    }
+  }
+  onCancelSubmit={[MockFunction]}
+  onFormSubmit={[MockFunction]}
+/>
+`;

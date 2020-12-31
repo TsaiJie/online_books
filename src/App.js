@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Home from './containers/Home'
 import Create from './containers/Create'
 import { testItems, testCategories } from './testData'
-import { flatternArr } from './utility'
+import { flatternArr, ID, parseToYearAndMonth } from './utility'
 
 export const AppContext = React.createContext()
 
@@ -23,6 +23,26 @@ class App extends PureComponent {
         delete newItems[item.id]
         this.setState({
           items: newItems,
+        })
+      },
+      createItem: (data, categoryId) => {
+        const newId = ID()
+        const parseDate = parseToYearAndMonth(data.date)
+        data.monthCategory = `${parseDate.year}-${parseDate.month}`
+        data.timestamp = new Date(data.date).getTime()
+        const newItem = { ...data, id: newId, cid: categoryId }
+        this.setState({
+          items: { ...this.state.items, [newId]: newItem },
+        })
+      },
+      updateItem: (item, updatedCategoryId) => {
+        const modifedItem = {
+          ...item,
+          cid: updatedCategoryId,
+          timestamp: new Date(item.date).getTime(),
+        }
+        this.setState({
+          items: { ...this.state.items, [modifedItem.id]: modifedItem },
         })
       },
     }

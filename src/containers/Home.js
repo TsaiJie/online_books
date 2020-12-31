@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import PriceList from '../components/PriceList'
 import ViewTab from '../components/ViewTab'
+import Ionicon from 'react-ionicons'
 import {
   LIST_VIEW,
   CHART_VIEW,
@@ -13,6 +14,7 @@ import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
 import CreateBtn from '../components/CreateBtn'
 import logo from '../logo.svg'
+import { Tabs, Tab } from '../components/Tabs'
 export const categories = {
   1: {
     id: '1',
@@ -57,6 +59,7 @@ export const newItem = {
   price: 300,
   cid: 1,
 }
+const tabsText = [LIST_VIEW, CHART_VIEW]
 export default class Home extends PureComponent {
   constructor(props) {
     super(props)
@@ -66,8 +69,8 @@ export default class Home extends PureComponent {
       tabView: LIST_VIEW,
     }
   }
-  changeView = (view) => {
-    this.setState({ tabView: view })
+  changeView = (index) => {
+    this.setState({ tabView: tabsText[index] })
   }
   changeDate = (year, month) => {
     this.setState({ currentDate: { year, month } })
@@ -139,7 +142,26 @@ export default class Home extends PureComponent {
           </div>
         </header>
         <div className="content-area py-3 px-3">
-          <ViewTab activeTab={tabView} onTabChange={this.changeView}></ViewTab>
+          <Tabs activeIndex={0} onTabChange={this.changeView}>
+            <Tab>
+              <Ionicon
+                className="rounded-circle mr-2"
+                fontSize="25px"
+                color={'#007bff'}
+                icon={'ios-paper'}
+              />
+              列表模式
+            </Tab>
+            <Tab>
+              <Ionicon
+                className="rounded-circle mr-2"
+                fontSize="25px"
+                color={'#007bff'}
+                icon={'ios-pie'}
+              />
+              图表模式
+            </Tab>
+          </Tabs>
           <CreateBtn onClick={this.createItem} />
           {tabView === LIST_VIEW && (
             <PriceList
@@ -148,7 +170,9 @@ export default class Home extends PureComponent {
               onDeleteItem={this.deleteItem}
             />
           )}
-          {tabView === CHART_VIEW && <h1 className="chart-title">这里是图表区域</h1>}
+          {tabView === CHART_VIEW && (
+            <h1 className="chart-title">这里是图表区域</h1>
+          )}
         </div>
       </React.Fragment>
     )

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import PriceList from '../components/PriceList'
 import Ionicon from 'react-ionicons'
-import { AppContext } from '../App'
 import {
   LIST_VIEW,
   CHART_VIEW,
@@ -16,59 +15,13 @@ import CreateBtn from '../components/CreateBtn'
 import logo from '../logo.svg'
 import { Tabs, Tab } from '../components/Tabs'
 import withContext from '../WithContext'
-export const categories = {
-  1: {
-    id: '1',
-    name: '旅行',
-    type: 'outcome',
-    iconName: 'ios-plane',
-  },
-  2: {
-    id: '2',
-    name: '理财',
-    type: 'income',
-    iconName: 'logo-yen',
-  },
-}
-export const items = [
-  {
-    id: 1,
-    title: '去云南旅游',
-    date: '2020-12-10',
-    price: 200,
-    cid: 1,
-  },
-  {
-    id: 2,
-    title: '去云南旅游',
-    date: '2020-12-1',
-    price: 400,
-    cid: 1,
-  },
-  {
-    id: 3,
-    title: '理财收入',
-    date: '2020-12-22',
-    price: 400,
-    cid: 2,
-  },
-]
-export const newItem = {
-  id: 4,
-  title: '新添加的项目',
-  date: '2020-12-10',
-  price: 300,
-  cid: 1,
-}
+import { withRouter } from 'react-router-dom'
+
 const tabsText = [LIST_VIEW, CHART_VIEW]
 class Home extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      items,
-      currentDate: parseToYearAndMonth('2020/12/10'),
-      tabView: LIST_VIEW,
-    }
+  state = {
+    currentDate: parseToYearAndMonth('2020/12/10'),
+    tabView: LIST_VIEW,
   }
   changeView = (index) => {
     this.setState({ tabView: tabsText[index] })
@@ -76,49 +29,29 @@ class Home extends PureComponent {
   changeDate = (year, month) => {
     this.setState({ currentDate: { year, month } })
   }
-  modifyItem = (modifiedItem) => {
-    const modifiedItems = this.state.items.map((item) => {
-      if (item.id === modifiedItem.id) {
-        return { ...item, title: '更新后的标题' }
-      } else {
-        return item
-      }
-    })
-    this.setState({
-      items: modifiedItems,
-    })
-  }
   createItem = () => {
-    this.setState({
-      items: [newItem, ...this.state.items],
-    })
+    this.props.history.push('/create')
+  }
+  modifyItem = (modifiedItem) => {
+    this.props.history.push(`/edit/${modifiedItem.id}`)
   }
   deleteItem = (deletedItem) => {
-    const filteredItems = this.state.items.filter(
-      (item) => item.id !== deletedItem.id
-    )
-    this.setState({
-      items: filteredItems,
-    })
+    this.props.actions.deleteItem(deletedItem)
   }
 
   render() {
     const { data } = this.props
-    console.log(data)
-    const { items, currentDate, tabView } = this.state
-    const itemsWithCategory = items
-      .map((item) => {
-        item.category = categories[item.cid]
-        return item
-      })
-      .filter((item) => {
-        return item.date.includes(
-          `${currentDate.year}-${padLeft(currentDate.month)}`
-        )
-      })
+    const { items, categories } = data
+    const { currentDate, tabView } = this.state
+    // 把items和category给链接起来 生成新的数据
+    const itemsWithCategory = Object.keys(items).map((id) => {
+      items[id].category = categories[items[id].cid]
+      return items[id]
+    })
+
     let totalIncome = 0,
       totalOutcome = 0
-    items.forEach((item) => {
+    itemsWithCategory.forEach((item) => {
       if (item.category.type === TYPE_OUTCOME) {
         totalOutcome += item.price
       } else {
@@ -182,4 +115,4 @@ class Home extends PureComponent {
   }
 }
 
-export default withContext(Home)
+export default withRouter(withContext(Home))

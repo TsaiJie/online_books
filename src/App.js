@@ -10,16 +10,32 @@ import { flatternArr } from './utility'
 export const AppContext = React.createContext()
 
 class App extends PureComponent {
-  state = {
-    // 数据扁平化，以id作为key
-    items: flatternArr(testItems),
-    categories: flatternArr(testCategories),
+  constructor(props) {
+    super(props)
+    this.state = {
+      // 数据扁平化，以id作为key
+      items: flatternArr(testItems),
+      categories: flatternArr(testCategories),
+    }
+    this.actions = {
+      deleteItem: (item) => {
+        const newItems = JSON.parse(JSON.stringify(this.state.items))
+        delete newItems[item.id]
+        this.setState({
+          items: newItems,
+        })
+      },
+    }
   }
+
   render() {
     return (
-      <AppContext.Provider value={{
-        state: this.state
-      }}>
+      <AppContext.Provider
+        value={{
+          state: this.state,
+          actions: this.actions,
+        }}
+      >
         <Router>
           <div className="App">
             <ul>

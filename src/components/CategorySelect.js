@@ -20,7 +20,7 @@ export default class CategorySelect extends PureComponent {
     const { categories } = this.props
     const {selectedCategoryId} = this.state
     return (
-      <div className="category-select-component">
+      <div className="category-select-component ">
         <div className="row">
           {categories.map((category, index) => {
             const iconColor = (category.id === selectedCategoryId) ? Colors.white : Colors.gray

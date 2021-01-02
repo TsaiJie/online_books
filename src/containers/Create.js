@@ -15,8 +15,8 @@ class Create extends PureComponent {
     const { id } = props.match.params
     this.state = {
       selectedTab:
-        id && items[id] ? categories[items[id].cid].type : TYPE_OUTCOME,
-      selectedCategory: id && items[id] ? categories[items[id].cid] : null,
+        (id && items[id]) ? categories[items[id].cid].type : TYPE_OUTCOME,
+      selectedCategory: (id && items[id]) ? categories[items[id].cid] : null,
     }
   }
   componentDidMount() {
@@ -26,8 +26,8 @@ class Create extends PureComponent {
       const { editItem, categories } = data
       this.setState({
         selectedTab:
-          id && editItem ? categories[editItem.cid].type : TYPE_OUTCOME,
-        selectedCategory: id && editItem ? categories[editItem.cid] : null,
+          (id && editItem) ? categories[editItem.cid].type : TYPE_OUTCOME,
+        selectedCategory: (id && editItem) ? categories[editItem.cid] : null,
       })
     })
   }

@@ -48,27 +48,37 @@ class App extends PureComponent {
       }),
       getEditData: withLoading(async (id) => {
         console.log('APP getEditData ...')
-        let promiseArr = [axios.get('/categories')]
-        if (id) {
+        const { items, categories } = this.state
+        let promiseArr = []
+        if (Object.keys(categories).length === 0) {
+          promiseArr.push(axios.get('/categories'))
+        }
+        // id 是否请求过 》-1说明已经被fetch过
+        const itemAlreadyFetched = Object.keys(items).indexOf(id) > -1
+        if (id && !itemAlreadyFetched) {
           const getURKWithID = `/items/${id}`
           promiseArr.push(axios.get(getURKWithID))
         }
-        const [categories, editItem] = await Promise.all(promiseArr)
+        const [fecthedCategories, editItem] = await Promise.all(promiseArr)
+        const finalCategories = fecthedCategories
+          ? flatternArr(fecthedCategories.data)
+          : categories
+        const finalItem = editItem ? editItem.data: items[id]
         if (id) {
           this.setState({
-            categories: flatternArr(categories.data),
+            categories: finalCategories,
             isLoading: false,
-            items: { ...this.state.items, [id]: editItem.data },
+            items: { ...this.state.items, [id]: finalItem },
           })
         } else {
           this.setState({
-            categories: flatternArr(categories.data),
+            categories: finalCategories,
             isLoading: false,
           })
         }
         return {
-          categories: flatternArr(categories.data),
-          editItem: editItem ? editItem.data : null,
+          categories: finalCategories,
+          editItem: finalItem,
         }
       }),
       selectNewMonth: withLoading(async (year, month) => {
@@ -119,7 +129,10 @@ class App extends PureComponent {
         }
         const modifedItem = await axios.put(`/items/${item.id}`, updateData)
         this.setState({
-          items: { ...this.state.items, [modifedItem.data.id]: modifedItem.data },
+          items: {
+            ...this.state.items,
+            [modifedItem.data.id]: modifedItem.data,
+          },
           isLoading: false,
         })
 
@@ -130,7 +143,7 @@ class App extends PureComponent {
   }
 
   render() {
-    console.log("APP render...",this.state.items);
+    console.log('APP render...', this.state.items)
     return (
       <AppContext.Provider
         value={{

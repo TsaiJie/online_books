@@ -16,10 +16,20 @@ class Create extends PureComponent {
     this.state = {
       selectedTab:
         id && items[id] ? categories[items[id].cid].type : TYPE_OUTCOME,
-      selectedCategory: (id && items[id]) ? categories[items[id].cid] : null,
+      selectedCategory: id && items[id] ? categories[items[id].cid] : null,
     }
   }
-
+  componentDidMount() {
+    const { id } = this.props.match.params
+    this.props.actions.getEditData(id).then((data) => {
+      const { editItem, categories } = data
+      this.setState({
+        selectedTab:
+          id && editItem ? categories[editItem.cid].type : TYPE_OUTCOME,
+        selectedCategory: id && editItem ? categories[editItem.cid] : null,
+      })
+    })
+  }
   tabChange = (index) => {
     this.setState({
       selectedTab: tabsText[index],
@@ -55,7 +65,8 @@ class Create extends PureComponent {
     const filterCategories = Object.keys(categories)
       .filter((id) => categories[id].type === selectedTab)
       .map((id) => categories[id])
-    const tabIndex = tabsText.findIndex(text => text === selectedTab)
+    const tabIndex = tabsText.findIndex((text) => text === selectedTab)
+    console.log(selectedTab, selectedCategory);
     return (
       <div
         className="create-page py-3 px-3 rounded mt-3"

@@ -11,6 +11,7 @@ export const AppContext = React.createContext()
 class App extends PureComponent {
   constructor(props) {
     super(props)
+    console.log(this)
     this.state = {
       // 数据扁平化，以id作为key
       items: {},
@@ -42,6 +43,30 @@ class App extends PureComponent {
           isLoading: false,
         })
         return items
+      }),
+      getEditData: withLoading(async (id) => {
+        let promiseArr = [axios.get('/categories')]
+        if (id) {
+          const getURKWithID = `/items/${id}`
+          promiseArr.push(axios.get(getURKWithID))
+        }
+        const [categories, editItem] = await Promise.all(promiseArr)
+        if (id) {
+          this.setState({
+            categories: flatternArr(categories.data),
+            isLoading: false,
+            items: { ...this.state.items, [id]: editItem.data },
+          })
+        } else {
+          this.setState({
+            categories: flatternArr(categories.data),
+            isLoading: false,
+          })
+        }
+        return {
+          categories: flatternArr(categories.data),
+          editItem: editItem ? editItem.data : null,
+        }
       }),
       selectNewMonth: withLoading(async (year, month) => {
         this.setState({

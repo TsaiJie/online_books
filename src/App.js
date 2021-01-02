@@ -18,11 +18,17 @@ class App extends PureComponent {
       isLoading: false,
       currentDate: parseToYearAndMonth('2018/11/10'),
     }
-    this.actions = {
-      getInitalData: async () => {
+    const withLoading = (cb) => {
+      return (...args) => {
         this.setState({
           isLoading: true,
         })
+        // 返回一个Promise， 如果不返回 则不能调用then
+        return cb(...args)
+      }
+    }
+    this.actions = {
+      getInitalData: withLoading(async () => {
         const { currentDate } = this.state
         const getUrlWithData = `/items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timestamp&_order=desc`
         const results = await Promise.all([
@@ -36,8 +42,8 @@ class App extends PureComponent {
           isLoading: false,
         })
         return items
-      },
-      selectNewMonth: async (year, month) => {
+      }),
+      selectNewMonth: withLoading(async (year, month) => {
         this.setState({
           isLoading: true,
         })
@@ -46,23 +52,20 @@ class App extends PureComponent {
         this.setState({
           items: flatternArr(items.data),
           currentDate: { year, month },
-          isLoading: false
+          isLoading: false,
         })
         return items
-      },
-      deleteItem: async (item) => {
-        this.setState({
-          isLoading: true,
-        })
+      }),
+      deleteItem: withLoading(async (item) => {
         const deleteItem = await axios.delete(`/items/${item.id}`)
         const newItems = JSON.parse(JSON.stringify(this.state.items))
         delete newItems[item.id]
         this.setState({
           items: newItems,
-          isLoading: false
+          isLoading: false,
         })
         return deleteItem
-      },
+      }),
       createItem: (data, categoryId) => {
         const newId = ID()
         const parseDate = parseToYearAndMonth(data.date)

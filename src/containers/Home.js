@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react'
 import PriceList from '../components/PriceList'
 import Ionicon from 'react-ionicons'
-import {
-  LIST_VIEW,
-  CHART_VIEW,
-  TYPE_OUTCOME,
-  parseToYearAndMonth,
-} from '../utility'
+import { LIST_VIEW, CHART_VIEW, TYPE_OUTCOME } from '../utility'
 import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
 import CreateBtn from '../components/CreateBtn'
@@ -14,6 +9,7 @@ import logo from '../logo.svg'
 import { Tabs, Tab } from '../components/Tabs'
 import withContext from '../WithContext'
 import { withRouter } from 'react-router-dom'
+import Loader from '../components/loader'
 
 const tabsText = [LIST_VIEW, CHART_VIEW]
 class Home extends PureComponent {
@@ -21,13 +17,15 @@ class Home extends PureComponent {
     tabView: LIST_VIEW,
   }
   componentDidMount() {
-    this.props.actions.getInitalData()
+    this.props.actions.getInitalData().then(data=>{
+      console.log('haha', data)
+    })
   }
   changeView = (index) => {
     this.setState({ tabView: tabsText[index] })
   }
   changeDate = (year, month) => {
-    this.props.actions.selectNewMonth(year,month)
+    this.props.actions.selectNewMonth(year, month)
   }
   createItem = () => {
     this.props.history.push('/create')
@@ -41,7 +39,7 @@ class Home extends PureComponent {
 
   render() {
     const { data } = this.props
-    const { items, categories, currentDate } = data
+    const { items, categories, currentDate, isLoading } = data
     const { tabView } = this.state
     // 把items和category给链接起来 生成新的数据
     const itemsWithCategory = Object.keys(items).map((id) => {
@@ -78,36 +76,41 @@ class Home extends PureComponent {
           </div>
         </header>
         <div className="content-area py-3 px-3">
-          <Tabs activeIndex={0} onTabChange={this.changeView}>
-            <Tab>
-              <Ionicon
-                className="rounded-circle mr-2"
-                fontSize="25px"
-                color={'#007bff'}
-                icon={'ios-paper'}
-              />
-              列表模式
-            </Tab>
-            <Tab>
-              <Ionicon
-                className="rounded-circle mr-2"
-                fontSize="25px"
-                color={'#007bff'}
-                icon={'ios-pie'}
-              />
-              图表模式
-            </Tab>
-          </Tabs>
-          <CreateBtn onClick={this.createItem} />
-          {tabView === LIST_VIEW && (
-            <PriceList
-              items={itemsWithCategory}
-              onModifyItem={this.modifyItem}
-              onDeleteItem={this.deleteItem}
-            />
-          )}
-          {tabView === CHART_VIEW && (
-            <h1 className="chart-title">这里是图表区域</h1>
+          {isLoading && <Loader />}
+          {!isLoading && (
+            <React.Fragment>
+              <Tabs activeIndex={0} onTabChange={this.changeView}>
+                <Tab>
+                  <Ionicon
+                    className="rounded-circle mr-2"
+                    fontSize="25px"
+                    color={'#007bff'}
+                    icon={'ios-paper'}
+                  />
+                  列表模式
+                </Tab>
+                <Tab>
+                  <Ionicon
+                    className="rounded-circle mr-2"
+                    fontSize="25px"
+                    color={'#007bff'}
+                    icon={'ios-pie'}
+                  />
+                  图表模式
+                </Tab>
+              </Tabs>
+              <CreateBtn onClick={this.createItem} />
+              {tabView === LIST_VIEW && (
+                <PriceList
+                  items={itemsWithCategory}
+                  onModifyItem={this.modifyItem}
+                  onDeleteItem={this.deleteItem}
+                />
+              )}
+              {tabView === CHART_VIEW && (
+                <h1 className="chart-title">这里是图表区域</h1>
+              )}
+            </React.Fragment>
           )}
         </div>
       </React.Fragment>

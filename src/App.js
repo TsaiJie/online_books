@@ -4,9 +4,8 @@ import React, { PureComponent } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Home from './containers/Home'
 import Create from './containers/Create'
-import { testItems, testCategories } from './testData'
 import { flatternArr, ID, parseToYearAndMonth } from './utility'
-
+import axios from 'axios'
 export const AppContext = React.createContext()
 
 class App extends PureComponent {
@@ -14,15 +13,39 @@ class App extends PureComponent {
     super(props)
     this.state = {
       // 数据扁平化，以id作为key
-      items: flatternArr(testItems),
-      categories: flatternArr(testCategories),
+      items: {},
+      categories: {},
+      currentDate: parseToYearAndMonth('2018/11/10'),
     }
     this.actions = {
+      getInitalData: () => {
+        const { currentDate } = this.state
+        const getUrlWithData = `/items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timestamp&_order=desc`
+        const promiseArr = [axios.get('/categories'), axios.get(getUrlWithData)]
+        Promise.all(promiseArr).then((arr) => {
+          const [categories, items] = arr
+          this.setState({
+            items: flatternArr(items.data),
+            categories: flatternArr(categories.data),
+          })
+        })
+      },
+      selectNewMonth: (year, month) => {
+        const getUrlWithData = `/items?monthCategory=${year}-${month}&_sort=timestamp&_order=desc`
+        axios.get(getUrlWithData).then((items) => {
+          this.setState({
+            items: flatternArr(items.data),
+            currentDate: { year, month },
+          })
+        })
+      },
       deleteItem: (item) => {
-        const newItems = JSON.parse(JSON.stringify(this.state.items))
-        delete newItems[item.id]
-        this.setState({
-          items: newItems,
+        axios.delete(`/items/${item.id}`).then(() => {
+          const newItems = JSON.parse(JSON.stringify(this.state.items))
+          delete newItems[item.id]
+          this.setState({
+            items: newItems,
+          })
         })
       },
       createItem: (data, categoryId) => {

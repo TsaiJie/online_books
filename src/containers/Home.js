@@ -4,10 +4,8 @@ import Ionicon from 'react-ionicons'
 import {
   LIST_VIEW,
   CHART_VIEW,
-  TYPE_INCOME,
   TYPE_OUTCOME,
   parseToYearAndMonth,
-  padLeft,
 } from '../utility'
 import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
@@ -20,14 +18,16 @@ import { withRouter } from 'react-router-dom'
 const tabsText = [LIST_VIEW, CHART_VIEW]
 class Home extends PureComponent {
   state = {
-    currentDate: parseToYearAndMonth('2020/12/10'),
     tabView: LIST_VIEW,
+  }
+  componentDidMount() {
+    this.props.actions.getInitalData()
   }
   changeView = (index) => {
     this.setState({ tabView: tabsText[index] })
   }
   changeDate = (year, month) => {
-    this.setState({ currentDate: { year, month } })
+    this.props.actions.selectNewMonth(year,month)
   }
   createItem = () => {
     this.props.history.push('/create')
@@ -41,8 +41,8 @@ class Home extends PureComponent {
 
   render() {
     const { data } = this.props
-    const { items, categories } = data
-    const { currentDate, tabView } = this.state
+    const { items, categories, currentDate } = data
+    const { tabView } = this.state
     // 把items和category给链接起来 生成新的数据
     const itemsWithCategory = Object.keys(items).map((id) => {
       items[id].category = categories[items[id].cid]

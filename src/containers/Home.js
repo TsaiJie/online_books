@@ -17,9 +17,7 @@ class Home extends PureComponent {
     tabView: LIST_VIEW,
   }
   componentDidMount() {
-    this.props.actions.getInitalData().then(data=>{
-      console.log('haha', data)
-    })
+    this.props.actions.getInitalData()
   }
   changeView = (index) => {
     this.setState({ tabView: tabsText[index] })

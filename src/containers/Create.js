@@ -20,6 +20,7 @@ class Create extends PureComponent {
     }
   }
   componentDidMount() {
+    console.log('Create Mount... ');
     const { id } = this.props.match.params
     this.props.actions.getEditData(id).then((data) => {
       const { editItem, categories } = data
@@ -44,12 +45,19 @@ class Create extends PureComponent {
     }
     if (!isEditMode) {
       // create
-      this.props.actions.createItem(item, this.state.selectedCategory.id)
+      this.props.actions
+        .createItem(item, this.state.selectedCategory.id)
+        .then(() => {
+          this.props.history.push('/')
+        })
     } else {
       // update
-      this.props.actions.updateItem(item, this.state.selectedCategory.id)
+      this.props.actions
+        .updateItem(item, this.state.selectedCategory.id)
+        .then(() => {
+          this.props.history.push('/')
+        })
     }
-    this.props.history.push('/')
   }
   selectedCategory = (category) => {
     this.setState({
@@ -66,7 +74,6 @@ class Create extends PureComponent {
       .filter((id) => categories[id].type === selectedTab)
       .map((id) => categories[id])
     const tabIndex = tabsText.findIndex((text) => text === selectedTab)
-    console.log(selectedTab, selectedCategory);
     return (
       <div
         className="create-page py-3 px-3 rounded mt-3"

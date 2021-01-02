@@ -11,7 +11,7 @@ export const AppContext = React.createContext()
 class App extends PureComponent {
   constructor(props) {
     super(props)
-    console.log(this)
+    console.log('App constructor')
     this.state = {
       // 数据扁平化，以id作为key
       items: {},
@@ -24,12 +24,14 @@ class App extends PureComponent {
         this.setState({
           isLoading: true,
         })
+        // console.log('isLoading: true')
         // 返回一个Promise， 如果不返回 则不能调用then
         return cb(...args)
       }
     }
     this.actions = {
       getInitalData: withLoading(async () => {
+        console.log('APP getInitalData ...')
         const { currentDate } = this.state
         const getUrlWithData = `/items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timestamp&_order=desc`
         const results = await Promise.all([
@@ -45,6 +47,7 @@ class App extends PureComponent {
         return items
       }),
       getEditData: withLoading(async (id) => {
+        console.log('APP getEditData ...')
         let promiseArr = [axios.get('/categories')]
         if (id) {
           const getURKWithID = `/items/${id}`
@@ -69,9 +72,7 @@ class App extends PureComponent {
         }
       }),
       selectNewMonth: withLoading(async (year, month) => {
-        this.setState({
-          isLoading: true,
-        })
+        console.log('APP selectNewMonth')
         const getUrlWithData = `/items?monthCategory=${year}-${month}&_sort=timestamp&_order=desc`
         const items = await axios.get(getUrlWithData)
         this.setState({
@@ -82,6 +83,7 @@ class App extends PureComponent {
         return items
       }),
       deleteItem: withLoading(async (item) => {
+        console.log('APP deleteItem')
         const deleteItem = await axios.delete(`/items/${item.id}`)
         const newItems = JSON.parse(JSON.stringify(this.state.items))
         delete newItems[item.id]
@@ -91,30 +93,44 @@ class App extends PureComponent {
         })
         return deleteItem
       }),
-      createItem: (data, categoryId) => {
+      createItem: withLoading(async (data, categoryId) => {
+        console.log('APP createItem...')
         const newId = ID()
         const parseDate = parseToYearAndMonth(data.date)
         data.monthCategory = `${parseDate.year}-${parseDate.month}`
         data.timestamp = new Date(data.date).getTime()
-        const newItem = { ...data, id: newId, cid: categoryId }
-        this.setState({
-          items: { ...this.state.items, [newId]: newItem },
+        const newItem = await axios.post('/items', {
+          ...data,
+          id: newId,
+          cid: categoryId,
         })
-      },
-      updateItem: (item, updatedCategoryId) => {
-        const modifedItem = {
+        this.setState({
+          items: { ...this.state.items, [newId]: newItem.data },
+          isLoading: false,
+        })
+        return newItem.data
+      }),
+      updateItem: withLoading(async (item, updatedCategoryId) => {
+        console.log('App updateItem...')
+        const updateData = {
           ...item,
           cid: updatedCategoryId,
           timestamp: new Date(item.date).getTime(),
         }
+        const modifedItem = await axios.put(`/items/${item.id}`, updateData)
         this.setState({
-          items: { ...this.state.items, [modifedItem.id]: modifedItem },
+          items: { ...this.state.items, [modifedItem.data.id]: modifedItem.data },
+          isLoading: false,
         })
-      },
+
+        // this.actions.getInitalData()
+        return modifedItem.data
+      }),
     }
   }
 
   render() {
+    console.log("APP render...",this.state.items);
     return (
       <AppContext.Provider
         value={{

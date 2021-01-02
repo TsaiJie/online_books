@@ -108,22 +108,22 @@
       "timestamp": 1536969600000
     },
     {
-      "title": "新的吃饭",
-      "price": 2000,
+      "title": "喝酒",
+      "price": 22,
       "date": "2018-11-15",
       "monthCategory": "2018-11",
       "id": "_qmatbbw11",
       "cid": "6",
-      "timestamp": 1542896269187
+      "timestamp": 1542240000000
     },
     {
       "title": "请别人喝茶",
-      "price": 300,
+      "price": 100,
       "date": "2018-11-15",
       "monthCategory": "2018-11",
       "id": "_qryggm533",
       "cid": "3",
-      "timestamp": 1534291200000
+      "timestamp": 1542240000000
     },
     {
       "title": "饭局",
@@ -211,6 +211,15 @@
         "id": "10",
         "type": "income"
       }
+    },
+    {
+      "title": "吃晚饭",
+      "price": 100,
+      "date": "2021-01-02",
+      "monthCategory": "2021-1",
+      "timestamp": 1609545600000,
+      "id": "_r20ppx5az",
+      "cid": "2"
     }
   ]
 }

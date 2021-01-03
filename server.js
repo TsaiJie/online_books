@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const jsonServer = require('json-server')
 const server = jsonServer.create()
+const port = process.env.LEANCLOUD_APP_PORT || 3000
 // json-server 生成路由
 const router = jsonServer.router('db.json')
 const middleWares = jsonServer.defaults()
@@ -20,6 +21,6 @@ server.use(middleWares)
 // server 路由
 server.use(router)
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log('server is runing...')
 })

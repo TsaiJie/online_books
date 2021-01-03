@@ -7,7 +7,6 @@ import Create from './containers/Create'
 import { flatternArr, ID, parseToYearAndMonth } from './utility'
 import axios from 'axios'
 export const AppContext = React.createContext()
-
 class App extends PureComponent {
   constructor(props) {
     super(props)
@@ -17,7 +16,7 @@ class App extends PureComponent {
       items: {},
       categories: {},
       isLoading: false,
-      currentDate: parseToYearAndMonth('2018/11/10'),
+      currentDate: parseToYearAndMonth('2018/12/10'),
     }
     const withLoading = (cb) => {
       return (...args) => {
@@ -31,7 +30,6 @@ class App extends PureComponent {
     }
     this.actions = {
       getInitalData: withLoading(async () => {
-        console.log('APP getInitalData ...')
         const { currentDate } = this.state
         const getUrlWithData = `/items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timestamp&_order=desc`
         const results = await Promise.all([
@@ -47,7 +45,6 @@ class App extends PureComponent {
         return items
       }),
       getEditData: withLoading(async (id) => {
-        console.log('APP getEditData ...')
         const { items, categories } = this.state
         let promiseArr = []
         if (Object.keys(categories).length === 0) {
@@ -82,7 +79,6 @@ class App extends PureComponent {
         }
       }),
       selectNewMonth: withLoading(async (year, month) => {
-        console.log('APP selectNewMonth')
         const getUrlWithData = `/items?monthCategory=${year}-${month}&_sort=timestamp&_order=desc`
         const items = await axios.get(getUrlWithData)
         this.setState({
@@ -93,7 +89,6 @@ class App extends PureComponent {
         return items
       }),
       deleteItem: withLoading(async (item) => {
-        console.log('APP deleteItem')
         const deleteItem = await axios.delete(`/items/${item.id}`)
         const newItems = JSON.parse(JSON.stringify(this.state.items))
         delete newItems[item.id]
@@ -104,7 +99,6 @@ class App extends PureComponent {
         return deleteItem
       }),
       createItem: withLoading(async (data, categoryId) => {
-        console.log('APP createItem...')
         const newId = ID()
         const parseDate = parseToYearAndMonth(data.date)
         data.monthCategory = `${parseDate.year}-${parseDate.month}`
@@ -121,7 +115,6 @@ class App extends PureComponent {
         return newItem.data
       }),
       updateItem: withLoading(async (item, updatedCategoryId) => {
-        console.log('App updateItem...')
         const updateData = {
           ...item,
           cid: updatedCategoryId,
@@ -143,7 +136,6 @@ class App extends PureComponent {
   }
 
   render() {
-    console.log('APP render...', this.state.items)
     return (
       <AppContext.Provider
         value={{

@@ -1,18 +1,14 @@
 import React from 'react'
 //  mount 真实的DOM环境 真实的event
 import { mount } from 'enzyme'
-import Home, {newItem} from '../Home'
+import { Home } from '../Home'
 import PriceList from '../../components/PriceList'
 import ViewTab from '../../components/ViewTab'
 import {
   LIST_VIEW,
   CHART_VIEW,
-  TYPE_INCOME,
-  TYPE_OUTCOME,
   parseToYearAndMonth,
-  padLeft,
 } from '../../utility'
-import TotalPrice from '../../components/TotalPrice'
 import MonthPicker from '../../components/MonthPicker'
 import CreateBtn from '../../components/CreateBtn'
 
@@ -45,7 +41,6 @@ describe('test Home container componnet', () => {
   it('click the create button, should create the new item', () => {
     wrapper.find(CreateBtn).simulate('click')
     expect(wrapper.find(PriceList).props().items.length).toEqual(4)
-    expect(wrapper.state('items')[0]).toEqual(newItem)
+    expect(wrapper.state('items')[0]).toEqual()
   })
-  
 })

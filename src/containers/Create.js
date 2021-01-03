@@ -8,7 +8,7 @@ import withContext from '../WithContext'
 
 const tabsText = [TYPE_OUTCOME, TYPE_INCOME]
 
-class Create extends PureComponent {
+export class Create extends PureComponent {
   constructor(props) {
     super(props)
     const { categories, items } = props.data
@@ -102,5 +102,4 @@ class Create extends PureComponent {
     )
   }
 }
-
 export default withRouter(withContext(Create))

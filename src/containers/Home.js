@@ -1,18 +1,36 @@
 import React, { PureComponent } from 'react'
 import PriceList from '../components/PriceList'
 import Ionicon from 'react-ionicons'
-import { LIST_VIEW, CHART_VIEW, TYPE_OUTCOME } from '../utility'
+import { LIST_VIEW, CHART_VIEW, TYPE_OUTCOME, TYPE_INCOME } from '../utility'
 import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
 import CreateBtn from '../components/CreateBtn'
 import logo from '../logo.svg'
 import { Tabs, Tab } from '../components/Tabs'
 import withContext from '../WithContext'
+import PieChart from '../components/PieChart'
 import { withRouter } from 'react-router-dom'
 import Loader from '../components/loader'
-
 const tabsText = [LIST_VIEW, CHART_VIEW]
-class Home extends PureComponent {
+const generateChartDataByCategory = (items, type = TYPE_INCOME) => {
+  let categoryMap = {}
+  items
+    .filter((item) => item.category.type === type)
+    .forEach((item) => {
+      if (categoryMap[item.cid]) {
+        categoryMap[item.cid].value += item.price * 1
+        categoryMap[item.cid].items.push(item.id)
+      } else {
+        categoryMap[item.cid] = {
+          name: item.category.name,
+          value: item.price * 1,
+          items: [item.id],
+        }
+      }
+    })
+  return Object.keys(categoryMap).map((mapKey) => ({ ...categoryMap[mapKey] }))
+}
+export class Home extends PureComponent {
   state = {
     tabView: LIST_VIEW,
   }
@@ -54,6 +72,15 @@ class Home extends PureComponent {
         totalIncome += item.price
       }
     })
+    const chartOutcomDataByCategory = generateChartDataByCategory(
+      itemsWithCategory,
+      TYPE_OUTCOME
+    )
+    const chartIncomDataByCategory = generateChartDataByCategory(
+      itemsWithCategory,
+      TYPE_INCOME
+    )
+    console.log(chartIncomDataByCategory)
     return (
       <React.Fragment>
         <header className="App-header">
@@ -106,7 +133,20 @@ class Home extends PureComponent {
                 />
               )}
               {tabView === CHART_VIEW && (
-                <h1 className="chart-title">这里是图表区域</h1>
+                <React.Fragment>
+                  <PieChart
+                    categoryData={chartOutcomDataByCategory}
+                    title={'支出'}
+                    width={400}
+                    height={400}
+                  />
+                  <PieChart
+                    categoryData={chartIncomDataByCategory}
+                    title={'收入'}
+                    width={400}
+                    height={400}
+                  />
+                </React.Fragment>
               )}
             </React.Fragment>
           )}

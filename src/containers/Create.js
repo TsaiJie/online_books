@@ -20,7 +20,6 @@ export class Create extends PureComponent {
     }
   }
   componentDidMount() {
-    console.log('Create Mount... ');
     const { id } = this.props.match.params
     this.props.actions.getEditData(id).then((data) => {
       const { editItem, categories } = data

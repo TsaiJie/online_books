@@ -35,8 +35,7 @@ export default class CustomPieChart extends PureComponent {
     }
   }
   drawPieChart = () => {
-    const { categoryData } = this.props
-    console.log(categoryData);
+    const { categoryData, title } = this.props
     // 基于准备好的dom，初始化echarts实例
     const myChart = Echarts.init(this.PieChartRef)
     // 指定图表的配置项和数据
@@ -45,7 +44,7 @@ export default class CustomPieChart extends PureComponent {
       legend: {},
       series: [
         {
-          name: '面积模式',
+          name: title,
           type: 'pie',
           radius: [30, 110],
           center: ['55%', '50%'],

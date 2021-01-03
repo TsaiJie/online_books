@@ -10,7 +10,6 @@ export const AppContext = React.createContext()
 class App extends PureComponent {
   constructor(props) {
     super(props)
-    console.log('App constructor')
     this.state = {
       // 数据扁平化，以id作为key
       items: {},
@@ -23,7 +22,6 @@ class App extends PureComponent {
         this.setState({
           isLoading: true,
         })
-        // console.log('isLoading: true')
         // 返回一个Promise， 如果不返回 则不能调用then
         return cb(...args)
       }

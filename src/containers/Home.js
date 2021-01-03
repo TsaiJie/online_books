@@ -80,7 +80,6 @@ export class Home extends PureComponent {
       itemsWithCategory,
       TYPE_INCOME
     )
-    console.log(chartIncomDataByCategory)
     return (
       <React.Fragment>
         <header className="App-header">
